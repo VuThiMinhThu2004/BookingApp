@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="detail.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
+</head>
+
+<body>
+    <!-- navbar -->
+    <div class="container">
+        <nav class="navbar">
+            <a class="logo" href="/index">Hong Phuong</a>
+            <input type="checkbox" id="check">
+            <label for="check">
+                <i class="fas fa-bars" id="open"></i>
+                <i class="fas fa-times" id="close"></i>
+            </label>
+            <ul class="nav-list">
+                <li class="nav-item"><a href="/rooms" class="nav-link">Rooms</a></li>
+                <li class="nav-item"><a href="/restaurant" class="nav-link">Restaurant</a></li>
+                <li class="nav-item"><a href="/spa" class="nav-link">Service</a></li>
+                <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a href="/chat" class="nav-link">Chat</a></li>
+                <li class="nav-item"><a href="/booking" class="nav-link book-btn">Book Now</a></li>
+                <%if (!locals.session.userId) { %>
+                    <li class="nav-item"><a href="/loginform" class="nav-link book-btn">Login</a></li>
+                <% }else{ %>
+                    <li class="nav-item">
+                    <div class="dropdown">
+                        <button class="nav-link book-btn" style="cursor: pointer;">User</button>
+                        <div class="dropdown-content">
+                          <a class="nav-link" href="/profile">Profile</a>
+                          <a class="nav-link" href="/logout">Logout</a>
+                        </div>
+                      </div>
+                    </li>
+                <%}%>
+            </ul>
+        </nav>
+    </div>
+
+    <div class = "body-image">
+        <div class="slide-show">
+            <div class="list-images">
+                <img src="images/room-3.jpg" alt="1">
+                <img src="images/room3.1.jpg" alt="2">
+                <!-- <img src="images/room1.3.jpg" alt="3"> -->
+                <!-- <img src="images/room-4.jpg" alt="4"> -->
+            </div>
+            <div class="btns">
+                <div class="btn-left btn"><i class='bx bx-chevron-left'></i></div>
+                <div class="btn-right btn"><i class='bx bx-chevron-right'></i></div>
+            </div>
+            <div class="index-images">
+                <div class="index-item index-item-0 active"></div>
+                <div class="index-item index-item-1"></div>
+                <!-- <div class="index-item index-item-2"></div> -->
+                <!-- <div class="index-item index-item-3"></div> -->
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <h2 style="color:#999; margin-left:15%">Phòng ba (Triple Room)</h2>
+        <p style="color: black; font-size:25px; margin-left: 15%; width:60%">Mô tả : Triple Room được thiết kế tinh tế sang trọng nội thất đầy đủ tiện nghi hiện đại, cửa sổ kính rộng thoáng bao quát toàn cảnh thành phố mang đến cho bạn một không gian thanh bình và dễ chịu sẽ là sự lựa chọn cho những doanh nhân và khách du lịch.</p>
+        <h3 style="margin-left:15%; margin-top: 1cm; color:rgb(52, 48, 48); font-family:Josefin Sans Regular; font-weight:normal;">Tầm nhìn: đẹp, thoáng bao quát thành phố</h3>
+        <h3 style="margin-left:15%; margin-top: 1cm; color:rgb(52, 48, 48); font-family:Josefin Sans Regular; font-weight:normal;">Diện tích phòng : 35m2</h3>
+        <h3 style="margin-left:15%; margin-top: 1cm; color:rgb(52, 48, 48); font-family:Josefin Sans Regular; font-weight:normal;">Số lượng người      : 01-02 </h3>
+        <h3 style="margin-left:15%; margin-top: 1cm; color:rgb(52, 48, 48); font-family:Josefin Sans Regular; font-weight:normal; margin-bottom: 1.5cm;">Loại giường         : 1 giường đơn 1m8</h3>
+        <!-- <h7 style="margin-left:15%; margin-top: 1cm; color:#999; font-family:SourceSansPro Regular; font-weight:normal;">Các thiết bị theo phòng</h7>
+        <ul style="margin-left:15%; margin-top: 1cm; color:rgb(52, 48, 48); font-family:Josefin Sans Regular; font-weight:normal; margin-bottom: 1.5cm;">
+            <li>+ Trang thiết bị hiện đại</li>
+            <li>+ Điều hòa 2 chiều</li>
+            <li>+ Giường với thiết kế vải đệm mềm và mượt</li>
+            <li>+ Thảm trải phòng</li>
+            <li>+ Rèm cửa 2 lớp</li>
+            <li>+ Tủ quần áo</li>
+        </ul> -->
+    </div>
+
+    <div>
+        <div class="user">
+            <i class='bx bxs-hand-right'></i>
+            <div class = "use_rating">Rating the room</div>
+        </div>
+        <div class="wrapper">
+            <form method="POST" action = "/submit3">
+                <div class="rating">
+                    <input type="number" name="rating" hidden>
+                    <i class='bx bx-star star' style="--i: 0;"></i>
+                    <i class='bx bx-star star' style="--i: 1;"></i>
+                    <i class='bx bx-star star' style="--i: 2;"></i>
+                    <i class='bx bx-star star' style="--i: 3;"></i>
+                    <i class='bx bx-star star' style="--i: 4;"></i>
+                </div>
+                <button type="submit" class='btns_submit' id="submitBtn">Submit</button>
+            </form>
+        </div>
+
+
+        <script>
+            function showSuccessToast() {
+                toast({
+                    title: "Success!",
+                    message: "Rating submitted successfully!",
+                    type: "success",
+                    duration: 5000
+                });
+            }
+    </script>
+
+    </div>
+
+    <div class="app">
+        <div class="rate">
+            <div class="rating__average">
+                <h21 style = "display: block;left: 2cm;">4.5</h21>
+                    <div class="star-outer" style="display: inline-block">
+                        <div class="star-inner"></div>
+                    </div>
+                    <p1 style="font-size: 20px; display: block;margin-bottom: 1cm;">290,291</p1></div>
+                <div class="rating__progress">
+
+            </div>
+        </div>
+    </div>
+    <% if (locals.session.userId) { %>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+            const user = document.querySelector(".user");
+            const design = document.querySelector(".wrapper");
+
+            user.addEventListener("click", function() {
+                design.classList.toggle("active");
+            });
+        });
+        </script>
+    <% } %>
+
+
+    <% if (!locals.session.userId) { %>
+        <div id="toast"></div>
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                const user = document.querySelector(".user");
+
+                user.addEventListener("click", function() {
+                    showErrorToast();
+                });
+            });
+        
+
+            function showErrorToast() {
+                toast({
+                    title: "Failure!",
+                    message: "You are not logged in.",
+                    type: "error",
+                    duration: 5000
+                });
+            }
+            function toast({ title = "", message = "", type = "info", duration = 3000 }) {
+            const main = document.getElementById("toast");
+            if (main) {
+                const toast = document.createElement("div");
+
+                // Auto remove toast
+                const autoRemoveId = setTimeout(function () {
+                main.removeChild(toast);
+                }, duration + 1000);
+
+                // Remove toast when clicked
+                toast.onclick = function (e) {
+                if (e.target.closest(".toast__close")) {
+                    main.removeChild(toast);
+                    clearTimeout(autoRemoveId);
+                }
+                };
+
+                const icons = {
+                success: "fas fa-check-circle",
+                info: "fas fa-info-circle",
+                warning: "fas fa-exclamation-circle",
+                error: "fas fa-exclamation-circle"
+                };
+                const icon = icons[type];
+                const delay = (duration / 1000).toFixed(2);
+
+                toast.classList.add("toast", `toast--${type}`);
+                toast.style.animation = `slideInLeft ease .3s, fadeOut linear 1s ${delay}s forwards`;
+
+                toast.innerHTML = `
+                                <div class="toast__icon">
+                                    <i class="${icon}"></i>
+                                </div>
+                                <div class="toast__body">
+                                    <h3 class="toast__title">${title}</h3>
+                                    <p class="toast__msg">${message}</p>
+                                </div>
+                                <div class="toast__close">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            `;
+                main.appendChild(toast);
+            }
+            }
+
+        </script>
+        <% } %>
+        
+        <div id="toast"></div>
+
+        <!-- Gọi showErrorToast() trong phần script -->
+        <script>
+            showErrorToast();
+            
+            function showErrorToast() {
+                toast({
+                    title: "Failure!",
+                    message: "Bạn đã đánh giá căn phòng này.",
+                    type: "warning",
+                    duration: 5000
+                });
+            }
+            function toast({ title = "", message = "", type = "info", duration = 3000 }) {
+            const main = document.getElementById("toast");
+            if (main) {
+                const toast = document.createElement("div");
+
+                // Auto remove toast
+                const autoRemoveId = setTimeout(function () {
+                main.removeChild(toast);
+                }, duration + 1000);
+
+                // Remove toast when clicked
+                toast.onclick = function (e) {
+                if (e.target.closest(".toast__close")) {
+                    main.removeChild(toast);
+                    clearTimeout(autoRemoveId);
+                }
+                };
+
+                const icons = {
+                success: "fas fa-check-circle",
+                info: "fas fa-info-circle",
+                warning: "fas fa-exclamation-circle",
+                error: "fas fa-exclamation-circle"
+                };
+                const icon = icons[type];
+                const delay = (duration / 1000).toFixed(2);
+
+                toast.classList.add("toast", `toast--${type}`);
+                toast.style.animation = `slideInLeft ease .3s, fadeOut linear 1s ${delay}s forwards`;
+
+                toast.innerHTML = `
+                                <div class="toast__icon">
+                                    <i class="${icon}"></i>
+                                </div>
+                                <div class="toast__body">
+                                    <h3 class="toast__title">${title}</h3>
+                                    <p class="toast__msg">${message}</p>
+                                </div>
+                                <div class="toast__close">
+                                    <i class="fas fa-times"></i>
+                                </div>
+                            `;
+                main.appendChild(toast);
+            }
+            }
+        </script>
+
+    
+
+
+
+    <script>
+        const listImage = document.querySelector('.list-images')
+        const imgs = document.getElementsByTagName('img')
+        const btnLeft = document.querySelector('.btn-left')
+        const btnRight = document.querySelector('.btn-right')
+        let current = 0
+        const length = imgs.length
+
+        const handleChangeSlide = () => {
+                if ( current == length - 1) {
+                    current = 0;
+                    let width = imgs[0].offsetWidth
+                    listImage.style.transform = `translateX(0px)`
+                    document.querySelector('.active').classList.remove('active')
+                    document.querySelector('.index-item-' + current).classList.add('active')
+                }
+                else{
+                    current++
+                    let width = imgs[0].offsetWidth
+                    listImage.style.transform = `translateX(${width * -1 * current}px)`
+                    document.querySelector('.active').classList.remove('active')
+                    document.querySelector('.index-item-' + current).classList.add('active')
+                }
+            }
+        let handleEventChangeSlide = setInterval(handleChangeSlide, 4000)
+
+        
+        btnRight.addEventListener('click', () => {
+            clearInterval(handleEventChangeSlide)
+            handleChangeSlide()
+            handleEventChangeSlide = setInterval(handleChangeSlide, 4000)
+        })
+
+        btnLeft.addEventListener('click', () => {
+            clearInterval(handleEventChangeSlide)
+            if ( current == 0) {
+                    current = length - 1;
+                    let width = imgs[0].offsetWidth
+                    listImage.style.transform = `translateX(${width * -1 * current}px)`
+                    document.querySelector('.active').classList.remove('active')
+                    document.querySelector('.index-item-' + current).classList.add('active')
+                }
+                else{
+                    current--
+                    let width = imgs[0].offsetWidth
+                    listImage.style.transform = `translateX(${width * -1 * current}px)`
+                    document.querySelector('.active').classList.remove('active')
+                    document.querySelector('.index-item-' + current).classList.add('active')
+                }
+                handleEventChangeSlide = setInterval(handleChangeSlide, 4000)
+        })
+
+
+    const allStar = document.querySelectorAll('.rating .star')
+    const ratingValue = document.querySelector('.rating input')
+
+    allStar.forEach((item, idx)=> {
+        item.addEventListener('click', function () {
+            let click = 0
+            ratingValue.value = idx + 1
+
+            allStar.forEach(i=> {
+                i.classList.replace('bxs-star', 'bx-star')
+                i.classList.remove('active')
+            })
+            for(let i=0; i<allStar.length; i++) {
+                if(i <= idx) {
+                    allStar[i].classList.replace('bx-star', 'bxs-star')
+                    allStar[i].classList.add('active')
+                } else {
+                    allStar[i].style.setProperty('--i', click)
+                    click++
+                }
+            }
+        })
+    })
+
+
+    fetch('/data3')
+  .then(response => response.json())
+  .then(data => {
+    let total_rating = 0;
+        rating_based_on_stars = 0
+    data.forEach((rate,index) => {
+        total_rating += rate.count;
+        rating_based_on_stars += rate.count * rate.stars
+    })
+
+    data.forEach(rate => {
+        let rating__progress = `
+        <div class="rating__progress-value">
+                    <p>${rate.stars} <span class="stars">&#9733</span></p>
+                    <div class="progress">
+                        <div class="bar" style ="width:${(rate.count / total_rating) * 100}%"></div>
+                    </div>
+                    <p>${rate.count.toLocaleString()}</p>
+                </div>
+        `;
+        document.querySelector('.rating__progress').innerHTML += rating__progress
+    })
+    let rating__average = (rating_based_on_stars/total_rating).toFixed(1);
+    document.querySelector('.rating__average h21').innerHTML = rating__average;
+    document.querySelector('.rating__average p1').innerHTML = total_rating.toLocaleString() + " reviews";
+    document.querySelector('.star-inner').style.width = (rating__average/5) * 100 + "%"
+  })
+  .catch(error => {
+    console.error('Lỗi khi lấy dữ liệu:', error);
+  });
+
+    
+
+    </script>
+
+    <!-- footer section -->
+    <footer>
+        <div class="container">
+            <div class="back-to-top">
+                <a href="#rooms-list"><i class="fas fa-chevron-up"></i></a>
+            </div>
+            <div class="footer__content row">
+                <div class="col-3">
+                    <h4>About</h4>
+                    <p>We are a part of chain of luxury hotels which extends all over the world. 
+                    We provide a luxorious stay with various value added and free services which will make you visit us over and over again.
+                    </p>
+                </div>
+                <div class="col-3">
+                    <h4>Payment Methods</h4>
+                    <p>Pay any way you choose, we support all payment options</p>
+                    <ul class="payment-methods">
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-paypal"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-cc-visa"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-cc-mastercard"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-apple-pay"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-3">
+                    <h4>Get Social</h4>
+                    <p>Follow us on social media and keep in touch with us.</p>
+                    <ul class="social-icons">
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-tripadvisor"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

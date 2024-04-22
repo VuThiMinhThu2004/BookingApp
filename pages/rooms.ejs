@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rooms</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <!-- navbar -->
+    <div class="container">
+        <nav class="navbar">
+            <a class="logo" href="/index">Hong Phuong</a>
+            <input type="checkbox" id="check">
+            <label for="check">
+                <i class="fas fa-bars" id="open"></i>
+                <i class="fas fa-times" id="close"></i>
+            </label>
+            <ul class="nav-list">
+                <li class="nav-item"><a href="/rooms" class="nav-link">Rooms</a></li>
+                <li class="nav-item"><a href="/restaurant" class="nav-link">Restaurant</a></li>
+                <li class="nav-item"><a href="/spa" class="nav-link">Service</a></li>
+                <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="/contact" class="nav-link">Contact</a></li>
+                <li class="nav-item"><a href="/chat" class="nav-link">Chat</a></li>
+                <li class="nav-item"><a href="/booking" class="nav-link book-btn">Book Now</a></li>
+                <%if (!locals.session.userId) { %>
+                    <li class="nav-item"><a href="/loginform" class="nav-link book-btn">Login</a></li>
+                <% }else{ %>
+                    <li class="nav-item">
+                    <div class="dropdown">
+                        <button class="nav-link book-btn" style="cursor: pointer;">User</button>
+                        <div class="dropdown-content">
+                          <a class="nav-link" href="/profile">Profile</a>
+                          <a class="nav-link" href="/logout">Logout</a>
+                        </div>
+                      </div>
+                    </li>
+                <%}%>
+            </ul>
+        </nav>
+    </div>
+
+    <!-- rooms list -->
+    <section id="rooms-list" class="rooms-list">
+        <div class="container container-medium">
+            <div class="row row-2">
+                <h2>Rooms</h2>
+                <div align="center">
+                    <form method="post" action="/room_search">
+                        <input type="search" name="search" placeholder="Search room name here ..." style="background-color: #eee;
+                        border: 1px solid #000; padding: 12px 15px; margin: 8px 0;">
+                        <button style="background-color: #455d58; color: white; 
+                        border: none; padding: 12px; margin: 5px; cursor: pointer;
+                        border-radius: 5px;">Search</button>
+                    </form>
+                </div>
+                <select name="sort" id="sort" style="width: 15%;">
+                    <option value="">Default</option>
+                    <option value="Price">Sort by Price</option>
+                    <option value="Reviews">Sort by Reviews</option>
+                    <option value="Popularity">Sort by Popularity</option>
+                    <option value="Spacing">Sort by Spacing</option>
+                </select>
+            </div>
+            <div name="room" id="room">
+            <% for(let i = 0; i < data.length; i++) {%>
+                <div class="row">
+                    <div class="col-2">
+                        <div class="room-image">
+                            <img src=<%= data[i].image %> alt="room">
+                        </div>
+                        <div class="room-info">
+                            <div>
+                                <h4> <%= data[i].name %> ROOM</h4>
+                                <p> <%= data[i].description%> </p>
+                                <p class="price"><span><%= data[i].price_each_day %></span> / night</p>
+                                <a href=<%= data[i].link %>>More Details</a>
+                                <% i++; %>
+                            </div>
+                        </div>
+                    </div>
+                    <% if(i <data.length) { %>
+                    <div class="col-2">
+                        <div class="room-image">
+                            <img src=<%= data[i].image %> alt="room">
+                        </div>
+                        <div class="room-info">
+                            <div>
+                                <div>
+                                    <h4> <%= data[i].name %> ROOM </h4>
+                                    <p> <%= data[i].description%> </p>
+                                    <p class="price"><span><%= data[i].price_each_day %></span> / night</p>
+                                    <a href=<%= data[i].link %>>More Details</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+                <% } %>
+            </div>
+            </div>
+    </section>
+
+    <!-- footer section -->
+    <footer>
+        <div class="container">
+            <div class="back-to-top">
+                <a href="#rooms-list"><i class="fas fa-chevron-up"></i></a>
+            </div>
+            <div class="footer__content row">
+                <div class="col-3">
+                    <h4>About</h4>
+                    <p>We are a part of chain of luxury hotels which extends all over the world. 
+                    We provide a luxorious stay with various value added and free services which will make you visit us over and over again.
+                    </p>
+                </div>
+                <div class="col-3">
+                    <h4>Payment Methods</h4>
+                    <p>Pay any way you choose, we support all payment options</p>
+                    <ul class="payment-methods">
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-paypal"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-cc-visa"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-cc-mastercard"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-apple-pay"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-3">
+                    <h4>Get Social</h4>
+                    <p>Follow us on social media and keep in touch with us.</p>
+                    <ul class="social-icons">
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fab fa-tripadvisor"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+<script>
+function _(element)
+{
+    console.log('2');
+    return document.getElementById(element);
+}
+function fetch_data(parent_element, child_element)
+{
+    console.log(parent_element, child_element);
+    fetch('/get_data?parent_value='+parent_element.value+'').then(function(response){
+        return response.json();
+    }).then(function(data){
+
+        var html = '';
+        
+        for(let i = 0; i < data.length; i++) {
+                html += `<div class="row">
+                            <div class="col-2">
+                                <div class="room-image">
+                                    <img src=` + data[i].image + ` alt="room">
+                                </div>
+                                <div class="room-info">
+                                    <div>
+                                        <h4>` + data[i].name + `ROOM</h4>
+                                        <p>` + data[i].description + `</p>
+                                        <p class="price"><span>` + data[i].price_each_day + `</span> / night</p>
+                                        <a href=` + data[i].link + `>More Details</a>
+                                    </div>
+                                </div>
+                            </div>`;
+                            i++;
+
+                html +=     `<div class="col-2">
+                            <div class="room-image">
+                                <img src=` + data[i].image + ` alt="room">
+                            </div>
+                            <div class="room-info">
+                                <div>
+                                    <div>
+                                        <h4>` + data[i].name + `ROOM</h4>
+                                        <p>` + data[i].description + `</p>
+                                        <p class="price"><span>` + data[i].price_each_day + `</span> / night</p>
+                                        <a href=` + data[i].link + `>More Details</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>`;
+        }
+        child_element.innerHTML = html;
+    });
+}
+
+_('sort').onchange = function(){
+    fetch_data(_('sort'), _('room'));
+};
+
+</script>

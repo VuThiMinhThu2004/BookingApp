@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chat</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="style.css" />
+    <style>
+      .box-chat {
+        width: 400px;
+        height: 100vh;
+        margin: auto;
+        position: relative;
+      }
+
+      .messages-box {
+        font-size: 20px;
+        position: absolute;
+        width: 800px;
+        height: 80vh;
+        bottom: 80px;
+        color: black;
+        border-radius: 8px;
+        border: 6px solid #455d58;
+        overflow-y: auto;
+      }
+
+      .message-input-div {
+        position: absolute;
+        bottom: 0;
+      }
+
+      #message-input {
+        background: rgba(60, 60, 60, 0.4);
+        color: white;
+        width: 800px;
+        height: 42px;
+      }
+
+      #message-input::placeholder {
+        color: white;
+        opacity: 0.4;
+      }
+
+      .box-title {
+        position: absolute;
+        font-size: 30px;
+        color: #455d58;
+        top: 30px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- navbar -->
+    <div class="container">
+      <nav class="navbar">
+        <a class="logo" href="/index">Hong Phuong</a>
+        <input type="checkbox" id="check" />
+        <label for="check">
+          <i class="fas fa-bars" id="open"></i>
+          <i class="fas fa-times" id="close"></i>
+        </label>
+        <ul class="nav-list">
+          <li class="nav-item"><a href="/rooms" class="nav-link">Rooms</a></li>
+          <li class="nav-item">
+            <a href="/restaurant" class="nav-link">Restaurant</a>
+          </li>
+          <li class="nav-item"><a href="/spa" class="nav-link">Service</a></li>
+          <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+          <li class="nav-item">
+            <a href="/contact" class="nav-link">Contact</a>
+          </li>
+          <li class="nav-item"><a href="/chat" class="nav-link">Chat</a></li>
+          <li class="nav-item">
+            <a href="/booking" class="nav-link book-btn">Book Now</a>
+          </li>
+          <%if (!locals.session.userId) { %>
+          <li class="nav-item">
+            <a
+              href="
+            "
+              class="nav-link book-btn"
+              >Login</a
+            >
+          </li>
+          <% }else{ %>
+          <li class="nav-item">
+            <div class="dropdown">
+              <button class="nav-link book-btn" style="cursor: pointer">
+                User
+              </button>
+              <div class="dropdown-content">
+                <a class="nav-link" href="/profile">Profile</a>
+                <a class="nav-link" href="/logout">Logout</a>
+              </div>
+            </div>
+          </li>
+          <%}%>
+        </ul>
+      </nav>
+    </div>
+    <input id="user_id" value="<%= user.user_id %>" readonly />
+    <input id="email" value="<%= user.email %>" />
+    <div class="box-chat">
+      <div class="box-title"><h1>Chat</h1></div>
+      <div class="messages-box">
+        <ul class="messages-ul"></ul>
+      </div>
+
+      <div class="input-group mb-3 message-input-div">
+        <input
+          type="text"
+          placeholder="Message"
+          class="form-control"
+          id="message-input"
+        />
+      </div>
+    </div>
+  </body>
+
+  <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    crossorigin="anonymous"
+  ></script>
+
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+  <script type="text/javascript">
+    const IP = "<%= process.env.CHAT_IP %>";
+    const PORT = "<%= process.env.CHAT_PORT %>";
+    const socket = io(`http://${IP}:${PORT}`);
+
+    socket.on("server_send_message", (msg) => {
+      $(".messages-ul").append(
+        `<li class="messages-li">${msg?.user_name}: ${msg?.message}</li>`
+      );
+    });
+
+    const input = $("#message-input");
+
+    input.keypress(function (e) {
+      if (e.which == 13) {
+        if (input.val()) {
+          socket.emit("client_send_message", {
+            user_id: $("#user_id").val(),
+            user_name: $("#email").val(),
+            message: input.val(),
+          });
+          input.val("");
+        }
+        return false;
+      }
+    });
+
+    $.ajax({
+      url: `http://${IP}:${PORT}/messages/search?user_id=<%= user.user_id %>`,
+      type: "GET",
+      success: function (data) {
+        data?.forEach((msg) => {
+          $(".messages-ul").append(
+            `<li class="messages-li">${msg?.user_name}: ${msg?.message}</li>`
+          );
+        });
+      },
+    });
+  </script>
+</html>

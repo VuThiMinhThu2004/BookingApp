@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Admin</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css">
+	<link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+	<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+	<div class="container">
+		<nav class="navbar">
+			<a class="logo" href="/index">Hong Phuong</a>
+			<ul class="nav-list">
+				<li class="nav-item"><a href="/admin/dashboard" class="nav-link">Waiting List</a></li>
+				<li class="nav-item"><a href="/admin/reservation" class="nav-link">Reservation</a></li>
+				<li class="nav-item"><a href="/admin/chat" class="nav-link">Chat</a></li>
+                <li class="nav-item"><a href="/admin/rooms" class="nav-link">Rooms</a></li>
+			</ul>
+			<ul class="nav-list">
+				<li class="nav-item"><a href="/admin/logout" class="nav-link book-btn">Logout</a></li>
+			</ul>
+		</nav>
+		</nav>
+	</div>
+	<% if (message && message.length > 0) { %>
+		<div class="alert alert-success" style="width: 100%;"><%= message[0] %></div>
+	<% } %>
+	<section id="info" class="info">
+		<div class="container">
+			<h2>ROOM LIST</h2>
+			<a href="/admin/addRoomForm" class="button" style="font-size: 2rem; font-family: var(--main-font-1);  float: right; margin-right: 250px; background-color: #4CAF50; color: white; padding: 10px 10px; border-radius: 4px;">+Add New</a>
+		</div>
+	</section>
+	<!-- Tab content with title -->
+	<div align="center">
+		<br><br>
+		<table>
+			<thead>
+				<tr> <!-- display column name -->
+					<th>ID</th>
+					<th>Room type</th>
+					<th>Number</th>
+					<th>Show</th>
+				</tr>
+			</thead>
+			<tbody>
+
+					<% room.forEach(element=>{ %>
+						<tr>
+							<td data-label="ID" style="font-size: 17px; color: aliceblue;">
+								<%= element.id %>
+							</td> <!--insert into row values -->
+							<td data-label="Room type" style="font-size: 17px; color: aliceblue;">
+								<%= element.name %>
+							</td>
+							<td data-label="Number" style="font-size: 17px; color: aliceblue;">
+								<%= element.room_count %>
+							</td>
+                        <td>
+							<form method="POST" action="/admin/roomlist?id=<%= element.id %>">
+								<button class="edit-btn">
+									Show
+								</button>
+							</form>
+						</td>
+						</tr>
+						<% }) %>
+			</tbody>
+		</table>>
+	</div>
+	<script src="tab.js"></script>
+</body>
