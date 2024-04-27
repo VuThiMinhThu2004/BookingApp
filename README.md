@@ -45,7 +45,7 @@
 1. Press the **Fork** button (top right the page) to save copy of this project on your account.
 2. Download the repository files (project) from the download section or clone this project to your local machine by typing in the bash the following command:
 
-      git clone https://github.com/khuatbaonguyen123/HotelBooking.git
+      git clone https://github.com/VuThiMinhThu2004/Simple_Sign.git
 3. Install some essential libraries: `npm install`
 4. Import & execute the SQL queries from the Database folder to the MySQL database.
 5. Import the project in any IDE that support the aforementioned programming languages.
