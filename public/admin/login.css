@@ -25,7 +25,7 @@
 }
 
 body {
-    background: #455d58;
+    background: #222222;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -65,8 +65,8 @@ a {
 
 button {
     border-radius: 20px;
-    border: 1px solid #659289;
-    background-color: #659289;
+    border: 1px solid #c29c76;
+    background-color: #c29c76;
     color: #FFFFFF;
     font-size: 12px;
     font-weight: bold;

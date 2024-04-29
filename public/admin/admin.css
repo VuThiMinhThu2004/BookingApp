@@ -38,8 +38,8 @@
     --main-font-1: "Josefin Sans Regular", sans-serif;
     --main-font-2: "Josefin Sans Light", sans-serif;
     --secondary-font: "SourceSansPro Regular", sans-serif;
-    --main-color: #455d58;
-    --white-pinkish-color: #FAF2F7;
+    --main-color: #c29c76;
+    --white-pinkish-color: #222222;
     --white-color: #fff;
 }
 
@@ -119,7 +119,7 @@ header {
     bottom: 0;
     height: .2rem;
     width: 100%;
-    background-color: rgba(69, 93, 88, 0.65);
+    background-color: rgba(136, 115, 78, 0.65);
     transform: scaleX(0);
     transform-origin: right;
     transition: transform .4s linear;
@@ -173,7 +173,7 @@ header {
 
 h2 {
     font-size: 30px;
-    color: #455d58;
+    color: #c29c76;
     text-align: center;
     font-family: var(--main-font-1);
 }
@@ -181,7 +181,7 @@ h2 {
 h3, p {
     text-align: center;
     font-size: 30px;
-    color: #455d58;
+    color: #c29c76;
     font-family: var(--main-font-1);
 }
 
@@ -190,20 +190,20 @@ table {
 	border-collapse: collapse;
 	display: inline-block;
 	text-align: center;
-	border-top: 1px solid #888;
+	border-top: 1px solid #a18161;
 }
 table thead {
-	background: #0e1211;
+	background: #a18161;
 }
 table tr:nth-child(odd) {
-	background: #66857f;
+	background: #1c1c1c;
 }
 table tr:nth-child(even) {
-	background: #3d524e;
+	background: #1c1c1c;
 }
 table th, table td {
 	padding: 20px 40px;
-	border: 1px solid #888;
+	border: 1px solid #a18161;
 	border-width: 0 1px 1px;
     font-family: var(--main-font-2);
     font-size: 15px;

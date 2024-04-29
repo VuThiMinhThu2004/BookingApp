@@ -2,6 +2,8 @@ const express = require('express');
 const router = express.Router();
 const db=require('../database');
 const bcrypt=require('bcrypt');
+const puppeteer = require('puppeteer');
+const cli = require('../connect_redis.js');
 
 function isLoggedOut(req,res,next){
     if (req.session.userId)
@@ -16,87 +18,156 @@ function isLoggedIn(req,res,next)
     else res.redirect('/loginform');
 }
 
+function containsSpecialCharacters(str) {
+    const regex = /\./;;
+    return regex.test(str);
+}
+
+async function getCheckLink(Input) {
+    if (containsSpecialCharacters(Input)) {
+        const browser = await puppeteer.launch({ headless: true });
+        const page = await browser.newPage();
+        await page.goto('https://safeweb.norton.com/');
+        await page.waitForSelector("input[type='url']", { timeout: 2000 });
+        const input = await page.$("input[type='url']");
+        await input.type(Input);
+        await input.press('Enter');
+        try {
+            await page.waitForNavigation()
+            const ratingElement = await page.$("p.rating-label.xl-body-text-bold");
+            const ratingText = await page.evaluate(ratingElement => ratingElement.textContent, ratingElement);
+            await browser.close();
+            return ratingText;
+            
+        }
+        catch {
+            await browser.close();
+            return "Not Link";
+        }
+    }
+    else {
+        return "Not Link";
+    }
+}
 
 router.post('/signup', async (req,res)=>{
-    const {email,password} = req.body;
+    const {fname, lname, email,password} = req.body;
     let hashedPassword= await bcrypt.hash(password,10);
-    db.beginTransaction((err) => {
-        if (err) throw err;
-        db.query(`SELECT * FROM account WHERE email='${email}'`, (err, results) => {
-            if (err) {
-                db.rollback(() => {
-                    throw err;
-                });
-            }
-            if (results.length > 0) {
-                req.flash('error', 'Email already registered');
-                res.redirect('/signupform');
-                db.rollback();
-            } else {
-                db.query(`INSERT INTO account (email,password) VALUES ('${email}','${hashedPassword}')`, (err) => {
-                    if (err) {
-                        db.rollback(() => {
-                            throw err;
-                        });
-                    }
-                    const { fname, lname, phone, dob } = req.body;
-                    db.query(`SELECT id FROM account WHERE email='${email}'`, (err, results) => {
+    let checkfName = await getCheckLink(fname);
+    console.log("fname:" + checkfName);
+    if (checkfName === "Not Link" || checkfName === "Safe") {
+        let checklName = await getCheckLink(lname);
+        console.log("lname:" + checklName);
+        if (checklName === "Not Link" || checklName === "Safe") {
+            let checkPassword = await getCheckLink(password);
+            console.log(checkPassword);
+            if ((checkPassword === "Not Link" || checkPassword === "Safe") ) {
+                db.beginTransaction((err) => {
+                    if (err) throw err;
+                    db.query(`SELECT * FROM account WHERE email='${email}'`, (err, results) => {
                         if (err) {
                             db.rollback(() => {
                                 throw err;
                             });
                         }
-                        const id = results[0].id;
-                        db.query(`INSERT INTO booker VALUES (${id},'${fname}','${lname}','${dob}','${phone}')`, (err) => {
-                            if (err) {
-                                db.rollback(() => {
-                                    throw err;
-                                });
-                            }
-                            db.commit((err) => {
+                        if (results.length > 0) {
+                            req.flash('error', 'Email already registered');
+                            res.redirect('/signupform');
+                            db.rollback();
+                        } else {
+                            db.query(`INSERT INTO account (email,password) VALUES ('${email}','${hashedPassword}')`, (err) => {
                                 if (err) {
                                     db.rollback(() => {
                                         throw err;
                                     });
                                 }
-                                res.redirect('/index');
+                                const { fname, lname, phone, dob } = req.body;
+                                db.query(`SELECT id FROM account WHERE email='${email}'`, (err, results) => {
+                                    if (err) {
+                                        db.rollback(() => {
+                                            throw err;
+                                        });
+                                    }
+                                    const id = results[0].id;
+                                    db.query(`INSERT INTO booker VALUES (${id},'${fname}','${lname}','${dob}','${phone}')`, (err) => {
+                                        if (err) {
+                                            db.rollback(() => {
+                                                throw err;
+                                            });
+                                        }
+                                        db.commit((err) => {
+                                            if (err) {
+                                                db.rollback(() => {
+                                                    throw err;
+                                                });
+                                            }
+                                            res.redirect('/init_redis');
+                                        });
+                                    });
+                                });
                             });
-                        });
+                        }
                     });
                 });
             }
-        });
-    });
-})
-
-router.post('/signin',(req,res)=>{
-    const {email,password} = req.body;
-    if (!email | !password)
-        res.status(404).json({message: 'Please enter all fields'});
-    else{
-        db.query(`select * from account where email='${email}' and type_of_account = 'booker'`,(err,results)=>{
-            if (err) throw err;
-            if (results.length>0){
-                const user=results[0];
-                bcrypt.compare(password,user.password, (err,isMatch)=>{
-                    if (err) throw err;
-                    if (isMatch){
-                        req.session.userId=user.id;
-                        res.redirect('/index');
-                    } 
-                    else {
-                        req.flash('error','Password is not correct');
-                        res.redirect('/loginform')
-                    }
-                })
-            }
             else {
-                req.flash('error','Email is not registered');
-                res.redirect('/loginform')
+                return res.status(400).json({ error: 'Password not valid.' });
             }
-        })
+        }
+        else {
+            return res.status(400).json({ error: 'last name not valid.' });
+        }
+    }
+    else {
+        return res.status(400).json({ error: 'First name not valid.' });
     }
 })
+
+router.get('/init_redis', (req,res) =>{
+    db.query(`SELECT count(*) as cnt FROM bookingapp.booker;`, (err, result) => {
+        cli.zadd(`myzset${result[0].cnt + 1}`, 0, '1', 0, '2', 0, '3', 0, '4', 0, '5', 0, '6', (err, reply) => {
+            if (err) {
+            console.error('Error incrementing score:', err);
+            }
+            console.log(`myzset${result[0].cnt + 1}`);
+        });
+    });
+    res.redirect('/loginform');
+});
+
+router.post('/signin', async (req, res) => {
+    const { email, password } = req.body;
+    if (!email || !password) {
+        res.status(404).json({ message: 'Please enter all fields' });
+        return; 
+    }
+    let checkPassword = await getCheckLink(password);
+    console.log(checkPassword);
+    if ((checkPassword === "Not Link" || checkPassword === "Safe")) {
+        db.query(`SELECT * FROM account WHERE email='${email}' AND type_of_account = 'booker'`, (err, results) => {
+            if (err) throw err;
+            if (results.length > 0) {
+                const user = results[0];
+                bcrypt.compare(password, user.password, (err, isMatch) => {
+                    if (err) throw err;
+                    if (isMatch) {
+                        req.session.userId = user.id;
+                        res.redirect('/index');
+                    } else {
+                        req.flash('error', 'Password is not correct');
+                        res.redirect('/loginform');
+                    }
+                });
+            } else {
+                req.flash('error', 'Email is not registered');
+                res.redirect('/loginform');
+            }
+        });
+    }
+    else {
+        return res.status(400).json({ error: 'Password not valid.' });
+    }
+});
 
 router.get('/profile', isLoggedIn, (req, res) => {
     db.query(`select * 
@@ -165,25 +236,34 @@ router.get('/editProfile', isLoggedIn, (req, res) => {
     
 })
 
-router.post('/editProfile',isLoggedIn,(req,res)=>{
+router.post('/editProfile',isLoggedIn, async(req,res)=>{
     //check not duplicated email
     const {id,fname,lname,email,phone,dob}=req.body;
-    db.query(`select * from account where email='${email}' and id<>${id}`,(err,results)=>{
-        if (err) throw err;
-        if (results.length>0) //duplicated email
-        {
-            // res.json({error:'Email already registered'})
-            req.flash('error','Email already registered');
-            res.redirect(`/editProfile?id=${id}`);
+    
+    let checkfName = await getCheckLink(fname);
+    console.log("fname:" + checkfName);
+    if (checkfName === "Not Link" || checkfName === "Safe") {
+        let checklName = await getCheckLink(lname);
+        console.log("lname:" + checklName);
+        if (checklName === "Not Link" || checklName === "Safe") {
+            db.query(`select * from account where email='${email}' and id<>${id}`,(err,results)=>{
+                if (err) throw err;
+                if (results.length>0) //duplicated email
+                {
+                    // res.json({error:'Email already registered'})
+                    req.flash('error','Email already registered');
+                    res.redirect(`/editProfile?id=${id}`);
+                }
+                else  db.query(`update account, booker
+                                set first_name='${fname}',last_name='${lname}',email='${email}',phone='${phone}',birth_date='${dob}'
+                                where account.id=booker.id
+                                and account.id=${id}`,(err)=>{
+                                    if (err) throw err;
+                                    res.redirect('/profile');
+                })
+            })
         }
-        else  db.query(`update account, booker
-                        set first_name='${fname}',last_name='${lname}',email='${email}',phone='${phone}',birth_date='${dob}'
-                        where account.id=booker.id
-                        and account.id=${id}`,(err)=>{
-                            if (err) throw err;
-                            res.redirect('/profile');
-        })
-    })
+    }
    
 })
 
@@ -202,38 +282,40 @@ router.get('/editPassword', isLoggedIn, (req, res) => {
     
 })
 
-router.post('/editPassword',isLoggedIn, (req,res)=>{
+router.post('/editPassword',isLoggedIn, async (req,res)=>{
     const {id,oldPassword,newPassword,newPassword2}=req.body;
-    db.query(`select password from account where id=${id}`,(err,results)=>{
-        if (err) throw err;
-        if (results.length>0)  //account exists
-        {
-            const {password}=results[0];
-            bcrypt.compare(oldPassword,password,async (err,isMatch)=>{
-                if (err) throw err;
-                if (isMatch)  //password valid
-                {
-                    if (newPassword===newPassword2)  //new password confirmed
+    let CheckOldPassword = getCheckLink(oldPassword);
+    if (CheckOldPassword === "Not Link" || CheckOldPassword === "Safe") {
+        let CheckNewPassword = getCheckLink(newPassword);
+        if (CheckNewPassword === "Not Link" || CheckNewPassword === "Safe") {
+                db.query(`select password from account where id=${id}`,(err,results)=>{
+                    if (err) throw err;
+                    if (results.length>0)  //account exists
                     {
-                        let hashedPassword= await bcrypt.hash(newPassword,10);
-                        db.query(`update account set password='${hashedPassword}' where id=${id}`,(err)=>{
+                        const {password}=results[0];
+                        bcrypt.compare(oldPassword,password,async (err,isMatch)=>{
                             if (err) throw err;
-                            res.redirect('/profile');
+                            if (isMatch)  //password valid
+                            {
+                                if (newPassword===newPassword2)  //new password confirmed
+                                {
+                                    let hashedPassword= await bcrypt.hash(newPassword,10);
+                                    db.query(`update account set password='${hashedPassword}' where id=${id}`,(err)=>{
+                                        if (err) throw err;
+                                        res.redirect('/profile');
+                                    })
+                                }
+                            }
+                            else {
+                                req.flash('error','You enter the wrong password');
+                                res.redirect(`/editPassword?id=${id}`);
+                            }
                         })
                     }
-                    else {
-                        req.flash('error','New password is not matching');
-                        res.redirect(`/editPassword?id=${id}`);
-                    }
-                }
-                else {
-                    req.flash('error','You enter the wrong password');
-                    res.redirect(`/editPassword?id=${id}`);
-                }
-            })
+                    else res.redirect('/index');
+                })
         }
-        else res.redirect('/index');
-    })
+    }
 
 })
 

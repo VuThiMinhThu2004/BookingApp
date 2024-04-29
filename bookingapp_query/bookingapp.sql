@@ -5,7 +5,7 @@ use bookingapp;
 -- we do not concern about the info of admin so we don't need admin table 
 CREATE TABLE account (
   id int AUTO_INCREMENT primary key,
-  email varchar(255) not null,
+  email nvarchar(255) not null,
   password varchar(255) not null,
   type_of_account ENUM ('booker', 'admin') default 'booker' -- the admin account is only can be created in the sql server;
 );
@@ -53,7 +53,7 @@ CREATE TABLE type (
 	description TEXT,
 	link VARCHAR(255),
 	image VARCHAR(255),
-	FULLTEXT(description)
+  FULLTEXT(description)
 );
 
 CREATE TABLE room (
@@ -120,8 +120,6 @@ DEFAULT CHARACTER SET = utf8mb4;
 -- INDEXS
 
 create index email_idx on account(email);
-
-
 -- for further improvement of app we can add some other index to improve running speed
 
 -- SOME EVENT OR TRIGGER OR PROCEDURE OR FUNCTION
@@ -153,7 +151,6 @@ BEGIN
     RETURN totalPrice;
 END$$
 DELIMITER ;
-
 
 -- this trigger is to update the date_out of reservation and payment when guest want to checkout early
 delimiter //
@@ -204,66 +201,8 @@ from room
 left join room_reserved rr on room.id = rr.room_id
 left join reservation r on rr.reservation_id = r.id
 left join booker on r.booker_id = booker.id;
-
--- INSERT SOME NECESSARY FOR THE APP    
-insert into type(name,capacity)
-values 
-('single',1),
-('double',2),
-('triple',3),
-('quad',4),
-('president',2),
-('rooftop',2);
-
-
-UPDATE type 
-SET 
-	description = 'A spacious sigle room which has large single bed, locates between the 4th and 13rd floor 
-                                with sweeping view overlooking the vibrant city.',
-	link = '/detail1',
-    image = 'images/room-1.jpg'
-WHERE id = 1;
-
-UPDATE type 
-SET 
-	description = 'Providing an average of 34sqm of comfortable living space, 
-                                the Luxury Double Room offers a perfect blend of classical elegance',
-	link = '/detail2',
-    image = 'images/room-2.jpg'
-WHERE id = 2;
-
-UPDATE type 
-SET 
-	description = 'Located on upper level with panoramic view of Ho Guom, 
-                                the Standard One Person Room is the perfect retreat to leave behind the hassle of daily life and experience.',
-	link = '/detail3',
-    image = 'images/room-3.jpg'
-WHERE id = 3;
-
-UPDATE type 
-SET 
-	description = 'Spacious in size and elegant in style, the Deluxe Quad Suite features a living room, 
-                                an airy bedroom and a comfortable working area for greater privacy.',
-	link = '/detail4',
-    image = 'images/room-4.jpg'
-WHERE id = 4;
-
-UPDATE type 
-SET 
-	description = 'Embodies the elegance that defines our luxury hotel, 
-                                the President Suites are beautifully decorated in elegant tones that create a distinctive atmosphere.',
-	link = '/detail5',
-    image = 'images/room-5.jpg'
-WHERE id = 5;
-
-UPDATE type 
-SET 
-	description = 'Nestled on the top floor, the Rooftop Suite provides an ingenious blend of luxury and private living, 
-                                featuring the full range of first class hotel services.',
-	link = '/detail6',
-    image = 'images/room-6.jpg'
-WHERE id = 6;
-
+-- INSERT SOME NECESSARY FOR THE APP
+    
 insert into type(name,capacity, description, link, image)
 values 
 ('single',1,'A spacious sigle room which has large single bed, locates between the 4th and 13rd floor 
@@ -278,7 +217,7 @@ values
                                 the President Suites are beautifully decorated in elegant tones that create a distinctive atmosphere.','/detail5','images/room-5.jpg'),
 ('rooftop',2,'Nestled on the top floor, the Rooftop Suite provides an ingenious blend of luxury and private living, 
                                 featuring the full range of first class hotel services.','/detail6','images/room-6.jpg');
-
+      
 insert into room (number,type_id)
 values 
 (201,1),

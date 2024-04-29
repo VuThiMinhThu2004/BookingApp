@@ -59,8 +59,8 @@
 
 :root {
 	--yellow: #FFBD13;
-	--blue: #4383FF;
-	--blue-d-1: #3278FF;
+	--blue: #c29c76;
+	--blue-d-1: #866d53;
 	--light: #F5F5F5;
 	--grey: #AAA;
 	--white: #FFF;
@@ -87,7 +87,6 @@
 	max-width: 576px;
 	width: 100%;
 	border-radius: .75rem;
-	box-shadow: var(--shadow);
 	text-align: center;
 
 }
@@ -141,13 +140,13 @@
 
 .wrapper.active {
     display: block;
-    background-color: #FAF2F7;
+    background-color: #222222;
     margin-left: 30%;
 	margin-bottom: 2.5cm;
 }
 
 .bx.bxs-star.star.active {
-    background-color: #FAF2F7;
+    background-color: transparent;
 }
 
 .user {
@@ -157,21 +156,22 @@
     margin-bottom: 1.5cm;
 	cursor: pointer;
 	width: 10cm;
+	color: var(--blue)
 }
 
 .user:hover {
-color:red;
+color:var(--blue-d-1);
 }
 .user {
 	margin-left: 15%;
-	color: black;
+	color: var(--blue);
 }
 .btns_submit{
 	display: flex;
 	align-items: center;
 	justify-content: center;
 	
-	background-color: #4383FF;
+	background-color: var(--blue);
 	color:#FFF;
 	margin-top: 3cm;
 	padding: .75rem 1rem;
@@ -186,11 +186,11 @@ color:red;
 }
 
 .btns_submit:hover {
-	background-color: #3278FF;
+	background-color:var(--blue-d-1) ;
 }
 
 .app {
-	background-color: #FAF2F7;
+	background-color: #222222;
 	color: black;
 	min-height: 50vh;
 	display: grid;

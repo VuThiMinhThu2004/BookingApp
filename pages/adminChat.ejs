@@ -1,174 +1,222 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Chat</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
         crossorigin="anonymous" />
-    <link rel="stylesheet" href="admin.css">
-    <style>
-        .box-chat {
-            width: 400px;
-            height: 100vh;
-            margin: auto;
-            position: relative;
-        }
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+    />
+    <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="stylechat.css">
+    <link rel="stylesheet" href="tailwindcss-colors.css">
+  </head>
 
-        .messages-box {
-            font-size: 20px;
-            position: absolute;
-            width: 800px;
-            height: 80vh;
-            bottom: 80px;
-            color: black;
-            border-radius: 8px;
-            border: 6px solid #455D58;
-            overflow-y: auto;
-        }
-
-
-        .message-input-div {
-            position: absolute;
-            bottom: 0;
-        }
-
-        #message-input {
-            background: rgba(60, 60, 60, 0.4);
-            color: white;
-            width: 800px;
-        }
-
-        #message-input::placeholder {
-            color: white;
-            opacity: 0.4;
-        }
-
-        .box-title {
-            position: absolute;
-            font-size: 30px;
-            color: #455D58;
-            top: 30px;
-        }
-
-    </style>
-</head>
-
-<body>
+  <body>
+    <input type="hidden" id="user_id" value="<%= user.user_id %>">
+    <input type="hidden" id="email" value="<%= user.email %>" />
+    <!-- navbar -->
     <div class="container">
-        <nav class="navbar">
-            <a class="logo" href="/index">Hong Phuong</a>
-            <ul class="nav-list">
-                <li class="nav-item"><a href="/admin/dashboard" class="nav-link">Waiting List</a></li>
-                <li class="nav-item"><a href="/admin/reservation" class="nav-link">Reservation</a></li>
-                <li class="nav-item"><a href="/admin/chat" class="nav-link">Chat</a></li>
-                <li class="nav-item"><a href="/admin/rooms" class="nav-link">Rooms</a></li>
-            </ul>
-            <ul class="nav-list">
-                <li class="nav-item"><a href="/admin/logout" class="nav-link book-btn">Logout</a></li>
-            </ul>
-        </nav>
-        </nav>
-    </div>
-    <input id="user_id" value="<%= user.user_id %>" readonly />
-    <input id="email" value="<%= user.email %>" />
+      <nav class="navbar">
+          <a class="logo" href="/index">Hong Phuong</a>
+          <ul class="nav-list">
+              <li class="nav-item"><a href="/admin/dashboard" class="nav-link">Waiting List</a></li>
+              <li class="nav-item"><a href="/admin/reservation" class="nav-link">Reservation</a></li>
+              <li class="nav-item"><a href="/admin/chat" class="nav-link">Chat</a></li>
+              <li class="nav-item"><a href="/admin/rooms" class="nav-link">Rooms</a></li>
+          </ul>
+          <ul class="nav-list">
+              <li class="nav-item"><a href="/admin/logout" class="nav-link book-btn">Logout</a></li>
+          </ul>
+      </nav>
+      </nav>
+  </div>
 
-    <h1>User IDs</h1>
-    <ul>
-        <% userIds.forEach(userId => { %>
-            <li><a href="#" class="user-id" data-id="<%= userId %>"><%= userId %></a></li>
-        <% }); %>
-    </ul>
+      <section class="chat-section">
+        <div class="chat-container">
+          
+            <!-- end: Sidebar -->
+            <!-- start: Content -->
+            <div class="chat-content">
+                <!-- start: Content side -->
+                <div class="content-sidebar">
+                    <div class="content-sidebar-title">Chats</div>
+                    <form action="" class="content-sidebar-form">
+                        <input type="search" class="content-sidebar-input" placeholder="Search...">
+                        <button type="submit" class="content-sidebar-submit"><i class="ri-search-line"></i></button>
+                    </form>
+                    <div class="content-messages">
+                        <ul class="content-messages-list">
+                            <li class="content-message-title"><span>Recently</span></li>
+                            <% userIds.forEach(userId => { %>
+                            <li>
+                                <a href="#" class="user-id" data-id="<%= userId %>" data-conversation="#conversation-1">
+                                    <img class="content-message-image" class="user-id" data-id="<%= userId %>" src="https://img.icons8.com/bubbles/100/000000/user.png" alt="">
+                                    <span class="content-message-info" class="user-id" data-id="<%= userId %>">
+                                        <span class="content-message-name" class="user-id" data-id="<%= userId %>"><%= userId %></span>
+                                        <span class="content-message-text" class="user-id" data-id="<%= userId %>">New messages!</span>
+                                    </span>
+                                    <span class="content-message-more" class="user-id" data-id="<%= userId %>">
+                                        <span class="content-message-unread" class="user-id" data-id="<%= userId %>">5</span>
+                                        <span class="content-message-time" class="user-id" data-id="<%= userId %>">12:30</span>
+                                    </span>
+                                </a>
+                            </li>
+                            <% }); %>
+                        </ul>
+                    </div>
+                </div>
+                <!-- end: Content side -->
+                <!-- start: Conversation -->
+                <div class="conversation conversation-default active">
+                    <i class="ri-chat-3-line"></i>
+                    <p>Select chat and view conversation!</p>
+                </div>
+                <div class="conversation" id="conversation-1">
+                    <div class="conversation-top">
+                        <button type="button" class="conversation-back"><i class="ri-arrow-left-line"></i></button>
+                        <div class="conversation-user">
+                            <img class="conversation-user-image" src="https://img.icons8.com/bubbles/100/000000/user.png" alt="">
+                            <div>
+                                <div class="conversation-user-name">Someone</div>
+                                <div class="conversation-user-status online">online</div>
+                            </div>
+                        </div>
+                        <div class="conversation-buttons">
+                            <button type="button"><i class="ri-phone-fill"></i></button>
+                            <button type="button"><i class="ri-vidicon-line"></i></button>
+                            <button type="button"><i class="ri-information-line"></i></button>
+                        </div>
+                    </div>
+                    <div class="conversation-main">
+                    <ul class="message-container" id="message-container">
+                    </ul>
+                    <form class="message-form" id="message-form">
+                      <input type="text" name="message" id="message-input" class="message-input" />
+                      <div class="v-divider"></div>
+                      <button type="submit" class="send-button">
+                        send <span><i class="fas fa-paper-plane"></i></span>
+                      </button>
+                    </form>
+                    </div>
+                </div>
+                <!-- end: Conversation -->
+            </div>
+            <!-- end: Content -->
+          </section>
+      </div>
+  </body>
 
+  <script
+    src="https://code.jquery.com/jquery-3.6.0.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"
+    crossorigin="anonymous"
+  ></script>
+  <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.28.0/moment.min.js"
+      integrity="sha512-Q1f3TS3vSt1jQ8AwP2OuenztnLU6LwxgyyYOG1jgMW/cbEMHps/3wjvnl1P3WTrF3chJUWEoxDUEjMxDV8pujg=="
+      crossorigin="anonymous"
+    ></script>
+  <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 
-    <div class="box-chat">
-        <div class="box-title">
-            <h1>Chat</h1>
-        </div>
-        <div class="messages-box">
-            <ul class="messages-ul"></ul>
-        </div>
+  <script src="chatscript.js"></script>
 
-        <div class="input-group mb-3 message-input-div">
-            <input type="text" placeholder="Message" class="form-control" id="message-input" />
-        </div>
-    </div>
-</body>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+  <script type="text/javascript">
+    const socket = io()
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
-    crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
-
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-<script type="text/javascript">
-
-    const IP = "<%= process.env.CHAT_IP %>";
-    const PORT = "<%= process.env.CHAT_PORT %>";
-    const socket = io(`http://${IP}:${PORT}`);
-
-    socket.on("server_send_message", (msg) => {
-        $(".messages-ul").append(
-            `<li class="messages-li">${msg?.user_name}: ${msg?.message}</li>`
-        );
-    });
-
-    const input = $("#message-input");
-
-    input.keypress(function (e) {
-        if (e.which == 13) {
-            if (input.val()) {
-                socket.emit("client_send_message", {
-                    user_id: $("#user_id").val(),
-                    user_name: $("#email").val(),
-                    message: input.val(),
-                });
-                input.val("");
-            }
-            return false;
-        }
-    });
-
-    $.ajax({
-        url: `http://${IP}:${PORT}/messages`,
-        type: "GET",
-        success: function (data) {
-            data?.forEach((msg) => {
-                $(".messages-ul").append(
-                    `<li class="messages-li">${msg?.user_name}: ${msg?.message}</li>`
-                );
-            });
-        },
-    });
-    document.querySelectorAll('.user-id').forEach(link => {
-        link.addEventListener('click', (event) => {
-            event.preventDefault();
-            const selectedUserId = event.target.dataset.id;
-            const adminId = "<%= user.user_id %>";
-            const chatId = adminId + "to" + selectedUserId;
-            console.log("Selected chatId:", chatId);
-            document.getElementById('user_id').value = chatId;
-             $.ajax({
-                url: `http://${IP}:${PORT}/messages/search?user_id=${chatId}`,
-                type: "GET", 
-                success: function (data) {
-                    $(".messages-ul").empty()
-
-                    data?.forEach((msg) => {
-                        $(".messages-ul").append(
-                            `<li class="messages-li">${msg?.user_name}: ${msg?.message}</li>`
-                        );
-                    });
-                },
-                error: function (xhr, status, error) {
-                    console.error("Error saving chat ID:", error);
-                }
-            });
-        });
-    });
+    const messageContainer = document.getElementById('message-container')
+    const messageForm = document.getElementById('message-form')
+    const messageInput = document.getElementById('message-input')
+  
+    messageForm.addEventListener('submit', (e) => {
+      e.preventDefault()
+      sendMessage()
+    })
+  
+  
+    function sendMessage() {
+      if (messageInput.value === '') return
+      // console.log(messageInput.value)
+      const data = {
+        name: "me",
+        message: messageInput.value,
+        dateTime: new Date(),
+      }
+      socket.emit('message', data)
+      addMessageToUI(true, data)
+      messageInput.value = ''
+    }
+  
+    socket.on('chat-message', (data) => {
+      // console.log(data)
+      addMessageToUI(false, data)
+    })
+  
+    function addMessageToUI(isOwnMessage, data) {
+      clearFeedback()
+      const element = `
+        <li class="${isOwnMessage ? 'message-right' : 'message-left'}">
+            <p class="message">
+              ${data.message}
+              <span>${data.name} ● ${moment(data.dateTime).fromNow()}</span>
+            </p>
+          </li>
+          `
+  
+      messageContainer.innerHTML += element
+      scrollToBottom()
+    }
+  
+    function scrollToBottom() {
+      messageContainer.scrollTo(0, messageContainer.scrollHeight)
+    }
+  
+    messageInput.addEventListener('focus', (e) => {
+      socket.emit('feedback', {
+        feedback: `✍️ ${nameInput.value} is typing a message`,
+      })
+    })
+  
+    messageInput.addEventListener('keypress', (e) => {
+      socket.emit('feedback', {
+        feedback: `✍️ ${nameInput.value} is typing a message`,
+      })
+    })
+    messageInput.addEventListener('blur', (e) => {
+      socket.emit('feedback', {
+        feedback: '',
+      })
+    })
+  
+    socket.on('feedback', (data) => {
+      clearFeedback()
+      const element = `
+          <li class="message-feedback">
+            <p class="feedback" id="feedback">${data.feedback}</p>
+          </li>
+    `
+      messageContainer.innerHTML += element
+    })
+  
+    function clearFeedback() {
+      document.querySelectorAll('li.message-feedback').forEach((element) => {
+        element.parentNode.removeChild(element)
+      })
+    }
 </script>
-
 </html>

@@ -1,20 +1,17 @@
-const mysql = require('mysql');
+const mysql = require("mysql");
 const db = mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: '', /// thay doi password
-    database: 'bookingapp' // ghi ten database cua minh vao
-  });
+  host: "localhost",
+  user: "root",
+  password: "", /// thay doi password
+  database: "bookingapp", // ghi ten database cua minh vao
+});
 
-db.connect((err)=>{
-  if (!err) 
-      console.log('Connect successfully');
+db.connect((err) => {
+  if (!err) console.log("Connect successfully");
   else console.log(err);
-})
+});
 
-module.exports=db;
-
-
+module.exports = db;
 
 // const mysql = require('mysql');
 
@@ -36,20 +33,19 @@ module.exports=db;
 // // db.query = db.execute;
 
 // db.connect((err)=>{
-//   if (!err) 
+//   if (!err)
 //       console.log('Connect successfully');
 //   else console.log(err);
 // })
 
 // slaveConnection.connect((err)=>{
-//   if (!err) 
+//   if (!err)
 //       console.log('Connect successfully');
 //   else console.log(err);
 // })
 
 // module.exports = slaveConnection;
 // module.exports=db;
-
 
 // // const poolCluster = mysql.createPoolCluster();
 
@@ -71,20 +67,16 @@ module.exports=db;
 // //   poolCluster.add('SLAVE1', slave);
 
 // // master.connect((err)=>{
-// //   if (!err) 
+// //   if (!err)
 // //       console.log('Connect successfully');
 // //   else console.log(err);
 // // });
 
 // // slave.connect((err)=>{
-// //   if (!err) 
+// //   if (!err)
 // //       console.log('Connect successfully');
 // //   else console.log(err);
 // // })
-
-
-
-
 
 // // var state = {
 // //   pool: null,
@@ -98,14 +90,14 @@ module.exports=db;
 // //       host: 'localhost',
 // //     user: 'replication_user',
 // //     password: '12345', /// thay doi password
-// //     database: 'bookingapp' 
+// //     database: 'bookingapp'
 // //     })
 
 // //     state.pool.add('READ1', {
 // //       host: 'localhost',
 // //     user: 'replication_user',
 // //     password: '12345', /// thay doi password
-// //     database: 'bookingapp' 
+// //     database: 'bookingapp'
 // //     })
 
 // //     state.mode = mode

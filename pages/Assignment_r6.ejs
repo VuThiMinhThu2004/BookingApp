@@ -11,7 +11,13 @@
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" integrity="sha512-+4zCK9k+qNFUR5X+cKL9EIR+ZOhtIloNl9GIKS57V1MyNsYpYcUrUeQc9vNfzsWfV28IaLL3i96P9sdNyeRssA==" crossorigin="anonymous" />
 </head>
-
+<style>
+    :root {
+      --main-color: #cd9760;
+      --grey-color: rgb(190, 190, 190);
+      --white-color: #fff;
+  }
+  </style>
 <body>
     <!-- navbar -->
     <div class="container">
@@ -69,14 +75,14 @@
     </div>
 
     <div>
-        <h2 style="color:#999; margin-left:15%">ROOFTOP SUITE</h2>
-        <p style="color: black; font-size:25px; margin-left: 15%; width:60%">Mô tả : Rooftop Suite được thiết kế tinh tế sang trọng nội thất đầy đủ tiện nghi hiện đại, cửa sổ kính rộng thoáng bao quát toàn cảnh thành phố mang đến cho bạn một không gian thanh bình và dễ chịu sẽ là sự lựa chọn cho những doanh nhân và khách du lịch.</p>
-        <h3 style="margin-left:15%; margin-top: 1cm; color:rgb(52, 48, 48); font-family:Josefin Sans Regular; font-weight:normal;">Tầm nhìn: đẹp, thoáng bao quát thành phố</h3>
-        <h3 style="margin-left:15%; margin-top: 1cm; color:rgb(52, 48, 48); font-family:Josefin Sans Regular; font-weight:normal;">Diện tích phòng : 35m2</h3>
-        <h3 style="margin-left:15%; margin-top: 1cm; color:rgb(52, 48, 48); font-family:Josefin Sans Regular; font-weight:normal;">Số lượng người      : 01-02 </h3>
-        <h3 style="margin-left:15%; margin-top: 1cm; color:rgb(52, 48, 48); font-family:Josefin Sans Regular; font-weight:normal; margin-bottom: 1.5cm;">Loại giường         : 1 giường đơn 1m8</h3>
+        <h2 style="color:var(--main-color); margin-left:15%">ROOFTOP SUITE</h2>
+        <p style="color: var(--white-color); font-size:25px; margin-left: 15%; width:60%">Mô tả : Rooftop Suite được thiết kế tinh tế sang trọng nội thất đầy đủ tiện nghi hiện đại, cửa sổ kính rộng thoáng bao quát toàn cảnh thành phố mang đến cho bạn một không gian thanh bình và dễ chịu sẽ là sự lựa chọn cho những doanh nhân và khách du lịch.</p>
+        <h3 style="margin-left:15%; margin-top: 1cm; color:var(--grey-color); font-family:Josefin Sans Regular; font-weight:normal;">Tầm nhìn: đẹp, thoáng bao quát thành phố</h3>
+        <h3 style="margin-left:15%; margin-top: 1cm; color:var(--grey-color); font-family:Josefin Sans Regular; font-weight:normal;">Diện tích phòng : 35m2</h3>
+        <h3 style="margin-left:15%; margin-top: 1cm; color:var(--grey-color); font-family:Josefin Sans Regular; font-weight:normal;">Số lượng người      : 01-02 </h3>
+        <h3 style="margin-left:15%; margin-top: 1cm; color:var(--grey-color); font-family:Josefin Sans Regular; font-weight:normal; margin-bottom: 1.5cm;">Loại giường         : 1 giường đơn 1m8</h3>
         <!-- <h7 style="margin-left:15%; margin-top: 1cm; color:#999; font-family:SourceSansPro Regular; font-weight:normal;">Các thiết bị theo phòng</h7>
-        <ul style="margin-left:15%; margin-top: 1cm; color:rgb(52, 48, 48); font-family:Josefin Sans Regular; font-weight:normal; margin-bottom: 1.5cm;">
+        <ul style="margin-left:15%; margin-top: 1cm; color:rgb(190, 190, 190); font-family:Josefin Sans Regular; font-weight:normal; margin-bottom: 1.5cm;">
             <li>+ Trang thiết bị hiện đại</li>
             <li>+ Điều hòa 2 chiều</li>
             <li>+ Giường với thiết kế vải đệm mềm và mượt</li>
@@ -92,7 +98,7 @@
             <div class = "use_rating">Rating the room</div>
         </div>
         <div class="wrapper">
-            <form method="POST" action = "/submit6">
+            <form method="POST" action = "/submit?id=6">
                 <div class="rating">
                     <input type="number" name="rating" hidden>
                     <i class='bx bx-star star' style="--i: 0;"></i>
@@ -358,7 +364,7 @@
     })
 
 
-    fetch('/data6')
+    fetch('/data?id=6')
   .then(response => response.json())
   .then(data => {
     let total_rating = 0;
