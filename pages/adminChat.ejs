@@ -142,20 +142,57 @@
     const messageContainer = document.getElementById('message-container')
     const messageForm = document.getElementById('message-form')
     const messageInput = document.getElementById('message-input')
-  
+    const contentMessagesList = document.querySelector('.content-messages-list');
+    var currentReceiver;
+    var currentEmailReceiver;
+
+    contentMessagesList.addEventListener('click', function(event) {
+      if (event.target.hasAttribute('data-id')) {
+        var dataId = event.target.getAttribute('data-id');
+        currentReceiver = dataId;
+        console.log("Current Receiver: " + currentReceiver);
+      }
+    });
+
     messageForm.addEventListener('submit', (e) => {
       e.preventDefault()
       sendMessage()
     })
   
+    fetch('/getOldMessages')
+    .then(response => response.json())
+    .then(messages => {
+      // Lọc ra những tin nhắn phù hợp
+      const filteredMessages = messages.filter(message => {
+        return (message.receiver === currentReceiver && message.name === "admin") ||
+        (message.sender === "1to" + currentReceiver  && message.receiver === 1);
+        console.log("Filtered Messages: " + filteredMessages);
+      });
+  
+      // Hiển thị tin nhắn phù hợp trên giao diện người dùng
+      filteredMessages.forEach(message => {
+        console.log($("#email").val());
+        console.log(message.sender);
+        console.log(message.receiver);
+
+        var isOwn = ("admin"== message.name);
+        addMessageToUI(isOwn, message);
+      });
+    })
+    
+    .catch(error => {
+      console.error('Lỗi khi lấy tin nhắn cũ:', error)
+    })
   
     function sendMessage() {
       if (messageInput.value === '') return
       // console.log(messageInput.value)
       const data = {
-        name: "me",
+        name: "admin",
+        sender: $("#user_id").val(),
         message: messageInput.value,
         dateTime: new Date(),
+        receiver: currentReceiver,
       }
       socket.emit('message', data)
       addMessageToUI(true, data)

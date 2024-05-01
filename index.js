@@ -14,7 +14,6 @@ const generalRouter = require("./routes/general");
 const bookingRouter = require("./routes/booking");
 const adminRouter = require("./routes/admin");
 const chatRouter = require("./routes/chatting");
-const MongoClient = require("mongodb").MongoClient;
 
 const chatDemo = require("./routes/chatdemo");
 
@@ -33,6 +32,50 @@ mongoose
   .catch((error) => {
     console.error("Error connecting to MongoDB:", error);
   });
+
+  const messageSchema = new mongoose.Schema({
+    name: String,
+    sender: String,
+    message: String,
+    date: Date,
+    receiver: Number,
+  });
+  
+  // Tạo model từ schema
+  const Message = mongoose.model('Message', messageSchema);
+  
+  // Lưu tin nhắn vào MongoDB
+  function saveMessageToMongoDB(data) {
+    const newMessage = new Message({
+      name: data.name,
+      sender: data.sender,
+      message: data.message,
+      date: data.dateTime,
+      receiver: data.receiver,
+    });
+  
+    newMessage.save()
+      .then(() => {
+        console.log('Tin nhắn đã được lưu vào MongoDB');
+      })
+      .catch((error) => {
+        console.error('Lỗi khi lưu tin nhắn vào MongoDB:', error);
+      });
+  }
+
+  async function getOldMessages() {
+    try {
+      const messages = await Message.find()
+        .sort({ date: 1 })
+        .exec();
+      console.log('Tin nhắn cũ:', messages);
+      return messages;
+    } catch (error) {
+      console.error('Lỗi khi lấy tin nhắn cũ từ MongoDB:', error);
+      throw error;
+    }
+  }
+  
 
 // const clientRedis = Redis.createClient(); //default localhost
 
@@ -84,17 +127,6 @@ app.use(ratingRouter);
 
 app.use(chatDemo);
 
-var messagesCollection;
-
-MongoClient.connect(process.env.MONGOLOCAL_URL, function (err, db) {
-  if (err) {
-    console.error("Error connecting to MongoDB:", err);
-    return;
-  }
-  messagesCollection = db.collection("Messages"); // Gán giá trị cho biến toàn cục
-});
-
-// Bạn có thể sử dụng biến messagesCollection ở bất kỳ nơi nào trong phạm vi chương trình
 io.on("connection", function (socket) {
   console.log("Socket connected", socket.id);
 
@@ -103,12 +135,21 @@ io.on("connection", function (socket) {
   });
 
   socket.on("message", (data) => {
-
-    // messagesCollection.insertOne({ text: data }, function (err, res) {
-    //   console.log("inserted");
-    // });
+    saveMessageToMongoDB(data);
     socket.broadcast.emit("chat-message", data);
   });
+});
+
+// Import module Mongoose và định nghĩa model Message
+
+app.get('/getOldMessages', async (req, res) => {
+  try {
+    const messages = await getOldMessages();
+    res.json(messages);
+  } catch (error) {
+    console.error('Lỗi khi lấy tin nhắn cũ:', error);
+    res.status(500).send('Internal Server Error');
+  }
 });
 
 app.get("/get-session", (req, res) => {

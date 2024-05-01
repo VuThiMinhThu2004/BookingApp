@@ -131,7 +131,7 @@
       <!-- end: Content -->
   </section>
   </div>
-  <!-- </div> --> -->
+  <!-- </div> --> 
 </body>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
@@ -147,7 +147,6 @@
   crossorigin="anonymous"></script>
 
 <script src="chatscript.js"></script>
-
 <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script type="text/javascript">
   const socket = io()
@@ -156,19 +155,43 @@
   const messageForm = document.getElementById('message-form')
   const messageInput = document.getElementById('message-input')
 
+
+  fetch('/getOldMessages')
+  .then(response => response.json())
+  .then(messages => {
+    // Lọc ra những tin nhắn phù hợp
+    const filteredMessages = messages.filter(message => {
+      return (message.name === $("#email").val() && message.receiver === 1) ||
+             (message.receiver === parseInt($("#user_id").val().substring(3)) && message.name === "admin");
+    });
+
+    // Hiển thị tin nhắn phù hợp trên giao diện người dùng
+    filteredMessages.forEach(message => {
+      var isOwn = ($("#email").val() == message.name);
+      addMessageToUI(isOwn, message);
+    });
+  })
+
+  .catch(error => {
+    console.error('Lỗi khi lấy tin nhắn cũ:', error);
+  });
+
   messageForm.addEventListener('submit', (e) => {
     e.preventDefault()
     sendMessage()
   })
 
 
+
   function sendMessage() {
     if (messageInput.value === '') return
     // console.log(messageInput.value)
     const data = {
-      name: "me",
+      name: $("#email").val(),
+      sender: $("#user_id").val(),
       message: messageInput.value,
       dateTime: new Date(),
+      receiver: 1,
     }
     socket.emit('message', data)
     addMessageToUI(true, data)
@@ -181,17 +204,18 @@
   })
 
   function addMessageToUI(isOwnMessage, data) {
+    const messageClass = isOwnMessage ? "message-right" : "message-left";
     const element = `
-      <li class="${isOwnMessage ? 'message-right' : 'message-left'}">
+      <li class="${messageClass}">
           <p class="message">
             ${data.message}
             <span>${data.name} ● ${moment(data.dateTime).fromNow()}</span>
           </p>
         </li>
-        `
-
-    messageContainer.innerHTML += element
-    scrollToBottom()
+        `;
+  
+    messageContainer.innerHTML += element;
+    scrollToBottom();
   }
 
   function scrollToBottom() {
