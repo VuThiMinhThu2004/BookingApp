@@ -17,7 +17,7 @@ router.get("/chat", isLoggedIn, (req, res) => {
     console.log("Executing DB Query:", query); 
     db.query(query, (err, result) => {
       if (err) {
-        console.error("Error executing DB Query:", err); 
+        console.error("Error executing DB Query:", err);  
         throw err; 
       } else {
         console.log(result);

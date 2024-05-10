@@ -83,15 +83,10 @@
           </div>
           <div class="col-2">
             <form>
-              <input type="text" placeholder="Name" required />
-              <input type="email" placeholder="Email Address" required />
-              <textarea
-                row="20"
-                cols="20"
-                placeholder="Your Message"
-                required
-              ></textarea>
-              <button class="btn btn-white">Send</button>
+              <input type="text" id="name" placeholder="Name" required />
+              <input type="email" id="email" placeholder="Email Address" required />
+              <textarea id="message" rows="20" cols="20" placeholder="Your Message" required></textarea>
+              <button class="btn btn-white" onclick="sendSuccessMessage()">Send</button>
             </form>
           </div>
         </div>
@@ -169,4 +164,26 @@
       </div>
     </footer>
   </body>
+
+  <script>
+    function sendSuccessMessage() {
+      var nameInput = document.getElementById("name");
+      var emailInput = document.getElementById("email");
+      var messageInput = document.getElementById("message");
+  
+      if (nameInput.value && emailInput.value && messageInput.value) {
+        var container = document.getElementById("contact");
+        var successMessage = document.createElement("div");
+        successMessage.className = "alert alert-success";
+        successMessage.style.width = "100%";
+        successMessage.innerHTML = "Successful!";
+        container.appendChild(successMessage);
+  
+        // Clear form fields
+        nameInput.value = "";
+        emailInput.value = "";
+        messageInput.value = "";
+      }
+    }
+  </script>
 </html>

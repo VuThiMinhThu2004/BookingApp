@@ -77,14 +77,14 @@
                 <a href="#" class="user-id" data-id="1" data-conversation="#conversation-1">
                   <img class="content-message-image" class="user-id" data-id="1"
                     src="https://img.icons8.com/bubbles/100/000000/user.png" alt="">
-                  <span class="content-message-info" class="user-id" data-id="1">
-                    <span class="content-message-name" class="user-id" data-id="1">1</span>
-                    <span class="content-message-text" class="user-id" data-id="1">New messages!</span>
+                  <span class="content-message-info" class="user-id" id="messageNotice" data-id="1">
+                    <span class="content-message-name" class="user-id" data-id="1">Admin</span>
+                    <!-- <span class="content-message-text" class="user-id" data-id="1">New messages!</span> -->
                   </span>
-                  <span class="content-message-more" class="user-id" data-id="1">
+                  <!-- <span class="content-message-more" class="user-id" data-id="1">
                     <span class="content-message-unread" class="user-id" data-id="1">5</span>
                     <span class="content-message-time" class="user-id" data-id="1">12:30</span>
-                  </span>
+                  </span> -->
                 </a>
               </li>
             </ul>
@@ -131,7 +131,7 @@
       <!-- end: Content -->
   </section>
   </div>
-  <!-- </div> --> 
+  <!-- </div> -->
 </body>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
@@ -154,27 +154,28 @@
   const messageContainer = document.getElementById('message-container')
   const messageForm = document.getElementById('message-form')
   const messageInput = document.getElementById('message-input')
+  const messageTone = new Audio('/public/message-tone.mp3')
 
 
   fetch('/getOldMessages')
-  .then(response => response.json())
-  .then(messages => {
-    // Lọc ra những tin nhắn phù hợp
-    const filteredMessages = messages.filter(message => {
-      return (message.name === $("#email").val() && message.receiver === 1) ||
-             (message.receiver === parseInt($("#user_id").val().substring(3)) && message.name === "admin");
-    });
+    .then(response => response.json())
+    .then(messages => {
+      // Lọc ra những tin nhắn phù hợp
+      const filteredMessages = messages.filter(message => {
+        return (message.name === $("#email").val() && message.receiver === 1) ||
+          (message.receiver === parseInt($("#user_id").val().substring(3)) && message.name === "admin");
+      });
 
-    // Hiển thị tin nhắn phù hợp trên giao diện người dùng
-    filteredMessages.forEach(message => {
-      var isOwn = ($("#email").val() == message.name);
-      addMessageToUI(isOwn, message);
-    });
-  })
+      // Hiển thị tin nhắn phù hợp trên giao diện người dùng
+      filteredMessages.forEach(message => {
+        var isOwn = ($("#email").val() == message.name);
+        addMessageToUI(isOwn, message);
+      });
+    })
 
-  .catch(error => {
-    console.error('Lỗi khi lấy tin nhắn cũ:', error);
-  });
+    .catch(error => {
+      console.error('Lỗi khi lấy tin nhắn cũ:', error);
+    });
 
   messageForm.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -200,6 +201,7 @@
 
   socket.on('chat-message', (data) => {
     // console.log(data)
+    messageTone.play()
     addMessageToUI(false, data)
   })
 
@@ -213,9 +215,26 @@
           </p>
         </li>
         `;
-  
+
     messageContainer.innerHTML += element;
     scrollToBottom();
+
+    latestMessage = data.message;
+
+    // Cập nhật nội dung tin nhắn mới nhất
+    const newMessageElement = document.querySelector('.content-message-text');
+    if (newMessageElement) {
+      newMessageElement.textContent = latestMessage;
+    } else {
+      const messageNoticeElement = document.getElementById('messageNotice');
+      const newMessageElement = document.createElement('span');
+      newMessageElement.classList.add('content-message-text');
+      newMessageElement.classList.add('user-id');
+      newMessageElement.setAttribute('data-id', 1);
+      newMessageElement.textContent = latestMessage;
+      messageNoticeElement.appendChild(newMessageElement);
+    }
+
   }
 
   function scrollToBottom() {

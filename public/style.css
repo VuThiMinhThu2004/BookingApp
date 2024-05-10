@@ -30,15 +30,15 @@
     --main-font-1: "Josefin Sans Regular", sans-serif;
     --main-font-2: "Josefin Sans Light", sans-serif;
     --secondary-font: "SourceSansPro Regular", sans-serif;
-    --main-color: #cd9760;
-    --white-pinkish-color: #222222;
+    --main-color: #43766C;
+    --white-pinkish-color: #F8FAE5;
     --white-color: #fff;
 }
 
 /* basic styles */
 
 html {
-    color: var(--white-color);
+    color: #1c1c1c;
     font-size: 10px;
     font-family: var(--main-font-1);
     scroll-behavior: smooth;
@@ -601,7 +601,7 @@ footer {
 .room-info {
     text-align: center;
     padding: 1rem;
-    background-color:#e5e5e5;
+    background-color: var(--main-color);
     color: var(--white-pinkish-color);
 }
 
@@ -716,7 +716,7 @@ footer {
 }
 
 .features i {
-    color: #dedede;
+    color: var(--main-color);
     font-size: 2.8rem;
     margin-bottom: 1.5rem;
 }
@@ -747,7 +747,7 @@ footer {
 /* Contact page */
 
 .contact {
-    color: #ccc;
+    color: #1c1c1c;
 }
 
 .contact h3 {
@@ -771,7 +771,7 @@ footer {
     padding: 1.7rem 1.5rem;
     font-family: var(--main-font-2);
     font-size: 1.8rem;
-    color: var(--white-color);
+    color: #1c1c1c;
     margin-bottom: 3rem;
     transition: all .5s;
 }
@@ -870,7 +870,7 @@ textarea {
 
   .alert-success {
     background-color: var(--main-color);
-    color: #8a6e52;
+    color: var(--white-pinkish-color);
     border: 1px solid var(--main-color);
     padding: 15px;
     margin-bottom: 20px;

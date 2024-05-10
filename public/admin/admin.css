@@ -38,15 +38,15 @@
     --main-font-1: "Josefin Sans Regular", sans-serif;
     --main-font-2: "Josefin Sans Light", sans-serif;
     --secondary-font: "SourceSansPro Regular", sans-serif;
-    --main-color: #c29c76;
-    --white-pinkish-color: #222222;
+    --main-color: #43766C;
+    --white-pinkish-color: #F8FAE5;
     --white-color: #fff;
 }
 
 /* basic styles */
 
 html {
-    color: var(--white-color);
+    color: #1c1c1c;
     font-size: 10px;
     font-family: var(--main-font-1);
     scroll-behavior: smooth;
@@ -173,7 +173,7 @@ header {
 
 h2 {
     font-size: 30px;
-    color: #c29c76;
+    color: #43766C;
     text-align: center;
     font-family: var(--main-font-1);
 }
@@ -181,7 +181,7 @@ h2 {
 h3, p {
     text-align: center;
     font-size: 30px;
-    color: #c29c76;
+    color: #43766C;
     font-family: var(--main-font-1);
 }
 
@@ -190,20 +190,20 @@ table {
 	border-collapse: collapse;
 	display: inline-block;
 	text-align: center;
-	border-top: 1px solid #a18161;
+	border-top: 1px solid #43766C;
 }
 table thead {
-	background: #a18161;
+	background: transparent;
 }
 table tr:nth-child(odd) {
-	background: #1c1c1c;
+	background: transparent;
 }
 table tr:nth-child(even) {
-	background: #1c1c1c;
+	background: transparent;
 }
 table th, table td {
 	padding: 20px 40px;
-	border: 1px solid #a18161;
+	border: 1px solid #43766C;
 	border-width: 0 1px 1px;
     font-family: var(--main-font-2);
     font-size: 15px;
