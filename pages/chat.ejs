@@ -157,7 +157,7 @@
   const messageTone = new Audio('/public/message-tone.mp3')
 
 
-  fetch('/getOldMessages')
+  /*fetch('/getOldMessages')
     .then(response => response.json())
     .then(messages => {
       // Lọc ra những tin nhắn phù hợp
@@ -175,7 +175,7 @@
 
     .catch(error => {
       console.error('Lỗi khi lấy tin nhắn cũ:', error);
-    });
+    });*/
 
   messageForm.addEventListener('submit', (e) => {
     e.preventDefault()

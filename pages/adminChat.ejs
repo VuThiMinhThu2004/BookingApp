@@ -134,7 +134,7 @@
   const contentMessagesList = document.querySelector('.content-messages-list');
   var currentReceiver;
   var currentEmailReceiver;
-  const messageTone = new Audio('/public/message-tone.mp3')
+  const messageTone = new Audio('public/message-tone.mp3')
 
   contentMessagesList.addEventListener('click', function (event) {
     if (event.target.hasAttribute('data-id')) {
@@ -154,8 +154,8 @@
     .then(messages => {
       // Lọc ra những tin nhắn phù hợp
       const filteredMessages = messages.filter(message => {
-        return (message.receiver === parseInt(currentReceiver) && message.name === "admin") ||
-          (message.sender === currentReceiver && message.receiver === 1);
+        return (message.receiver == currentReceiver && message.sender === "1") ||
+          (message.sender === ("1to" + currentReceiver) && message.receiver == 1);
         console.log("Filtered Messages: " + filteredMessages);
       });
 
