@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Chat</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" />
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.2.0/fonts/remixicon.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="stylechat.css">
+  <link rel="stylesheet" href="tailwindcss-colors.css">
+</head>
+
+<body>
+  <input type="hidden" id="user_id" value="<%= user.user_id %>">
+  <input type="hidden" id="email" value="<%= user.email %>" />
+
+  <div class="container">
+    <nav class="navbar">
+      <a class="logo" href="/index">Hong Phuong</a>
+      <input type="checkbox" id="check" />
+      <label for="check">
+        <i class="fas fa-bars" id="open"></i>
+        <i class="fas fa-times" id="close"></i>
+      </label>
+      <ul class="nav-list">
+        <li class="nav-item"><a href="/rooms" class="nav-link">Rooms</a></li>
+        <li class="nav-item">
+          <a href="/restaurant" class="nav-link">Restaurant</a>
+        </li>
+        <li class="nav-item"><a href="/spa" class="nav-link">Service</a></li>
+        <li class="nav-item"><a href="/about" class="nav-link">About</a></li>
+        <li class="nav-item">
+          <a href="/contact" class="nav-link">Contact</a>
+        </li>
+        <li class="nav-item"><a href="/chat" class="nav-link">Chat</a></li>
+        <li class="nav-item">
+          <a href="/booking" class="nav-link book-btn">Book Now</a>
+        </li>
+        <%if (!locals.session.userId) { %>
+          <li class="nav-item">
+            <a href="
+            " class="nav-link book-btn">Login</a>
+          </li>
+          <% }else{ %>
+            <li class="nav-item">
+              <div class="dropdown">
+                <button class="nav-link book-btn" style="cursor: pointer">
+                  User
+                </button>
+                <div class="dropdown-content">
+                  <a class="nav-link" href="/profile">Profile</a>
+                  <a class="nav-link" href="/logout">Logout</a>
+                </div>
+              </div>
+            </li>
+            <%}%>
+      </ul>
+    </nav>
+  </div>
+
+  <section class="chat-section">
+    <div class="chat-container">
+      <div class="chat-content">
+        <!-- start: Content side -->
+        <div class="content-sidebar">
+          <div class="content-sidebar-title">Chats</div>
+          <form action="" class="content-sidebar-form">
+            <input type="search" class="content-sidebar-input" placeholder="Search...">
+            <button type="submit" class="content-sidebar-submit"><i class="ri-search-line"></i></button>
+          </form>
+          <div class="content-messages">
+            <ul class="content-messages-list">
+              <li class="content-message-title"><span>Recently</span></li>
+              <li>
+                <a href="#" class="user-id" data-id="1" data-conversation="#conversation-1">
+                  <img class="content-message-image" class="user-id" data-id="1"
+                    src="https://img.icons8.com/bubbles/100/000000/user.png" alt="">
+                  <span class="content-message-info" class="user-id" id="messageNotice" data-id="1">
+                    <span class="content-message-name" class="user-id" data-id="1">Admin</span>
+                    <!-- <span class="content-message-text" class="user-id" data-id="1">New messages!</span> -->
+                  </span>
+                  <!-- <span class="content-message-more" class="user-id" data-id="1">
+                    <span class="content-message-unread" class="user-id" data-id="1">5</span>
+                    <span class="content-message-time" class="user-id" data-id="1">12:30</span>
+                  </span> -->
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+        <!-- end: Content side -->
+        <!-- start: Conversation -->
+        <div class="conversation conversation-default active">
+          <i class="ri-chat-3-line"></i>
+          <p>Select chat and view conversation!</p>
+        </div>
+        <div class="conversation" id="conversation-1">
+          <div class="conversation-top">
+            <button type="button" class="conversation-back"><i class="ri-arrow-left-line"></i></button>
+            <div class="conversation-user">
+              <img class="conversation-user-image" src="https://img.icons8.com/bubbles/100/000000/user.png" alt="">
+              <div>
+                <div class="conversation-user-name">Admin
+                </div>
+                <div class="conversation-user-status online">online</div>
+              </div>
+            </div>
+            <div class="conversation-buttons">
+              <button type="button"><i class="ri-phone-fill"></i></button>
+              <button type="button"><i class="ri-vidicon-line"></i></button>
+              <button type="button"><i class="ri-information-line"></i></button>
+            </div>
+          </div>
+          <div class="conversation-main">
+            <ul class="message-container" id="message-container">
+            </ul>
+
+            <form class="message-form" id="message-form">
+              <input type="text" name="message" id="message-input" class="message-input" />
+              <div class="v-divider"></div>
+              <button type="submit" class="send-button">
+                send <span><i class="fas fa-paper-plane"></i></span>
+              </button>
+            </form>
+          </div>
+        </div>
+        <!-- end: Conversation -->
+      </div>
+      <!-- end: Content -->
+  </section>
+  </div>
+  <!-- </div> -->
+</body>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"
+  crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.28.0/moment.min.js"
+  integrity="sha512-Q1f3TS3vSt1jQ8AwP2OuenztnLU6LwxgyyYOG1jgMW/cbEMHps/3wjvnl1P3WTrF3chJUWEoxDUEjMxDV8pujg=="
+  crossorigin="anonymous"></script>
+
+<script src="chatscript.js"></script>
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+<script type="text/javascript">
+  const socket = io()
+
+  const messageContainer = document.getElementById('message-container')
+  const messageForm = document.getElementById('message-form')
+  const messageInput = document.getElementById('message-input')
+  const messageTone = new Audio('/public/message-tone.mp3')
+
+
+  /*fetch('/getOldMessages')
+    .then(response => response.json())
+    .then(messages => {
+      // Lọc ra những tin nhắn phù hợp
+      const filteredMessages = messages.filter(message => {
+        return (message.name === $("#email").val() && message.receiver === 1) ||
+          (message.receiver === parseInt($("#user_id").val().substring(3)) && message.name === "admin");
+      });
+
+      // Hiển thị tin nhắn phù hợp trên giao diện người dùng
+      filteredMessages.forEach(message => {
+        var isOwn = ($("#email").val() == message.name);
+        addMessageToUI(isOwn, message);
+      });
+    })
+
+    .catch(error => {
+      console.error('Lỗi khi lấy tin nhắn cũ:', error);
+    });*/
+
+  messageForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+    sendMessage()
+  })
+
+
+
+  function sendMessage() {
+    if (messageInput.value === '') return
+    // console.log(messageInput.value)
+    const data = {
+      name: $("#email").val(),
+      sender: $("#user_id").val(),
+      message: messageInput.value,
+      dateTime: new Date(),
+      receiver: 1,
+    }
+    socket.emit('message', data)
+    addMessageToUI(true, data)
+    messageInput.value = ''
+  }
+
+  socket.on('chat-message', (data) => {
+    // console.log(data)
+    messageTone.play()
+    addMessageToUI(false, data)
+  })
+
+  function addMessageToUI(isOwnMessage, data) {
+    const messageClass = isOwnMessage ? "message-right" : "message-left";
+    const element = `
+      <li class="${messageClass}">
+          <p class="message">
+            ${data.message}
+            <span>${data.name} ● ${moment(data.dateTime).fromNow()}</span>
+          </p>
+        </li>
+        `;
+
+    messageContainer.innerHTML += element;
+    scrollToBottom();
+
+    latestMessage = data.message;
+
+    // Cập nhật nội dung tin nhắn mới nhất
+    const newMessageElement = document.querySelector('.content-message-text');
+    if (newMessageElement) {
+      newMessageElement.textContent = latestMessage;
+    } else {
+      const messageNoticeElement = document.getElementById('messageNotice');
+      const newMessageElement = document.createElement('span');
+      newMessageElement.classList.add('content-message-text');
+      newMessageElement.classList.add('user-id');
+      newMessageElement.setAttribute('data-id', 1);
+      newMessageElement.textContent = latestMessage;
+      messageNoticeElement.appendChild(newMessageElement);
+    }
+
+  }
+
+  function scrollToBottom() {
+    messageContainer.scrollTo(0, messageContainer.scrollHeight)
+  }
+
+</script>
+
+</html>
